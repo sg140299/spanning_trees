@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+class dsu{
+    vector<vector<int>> edges;
+    vector<int> par;
+    public:
+    void init(int n){
+        par.resize(n);
+        for(int i=0;i<n;i++){
+            par[i]=i;
+        }
+
+    }
+    int get(int x){
+        if (x==par[x]) return x;
+        else return par[x]=get(par[x]);
+    }
+    void unite(int x,int y){
+        if(get(x)!=get(y)){
+            par[x]=y;
+        }
+    }
+};
+int main(){
+    int n,m;
+    cin>>n>>m;
+    dsu G(n);
+    for(int i=0;i<m;i++){
+        int x,y,w;
+        cin>>x>>y>>w;
+        G.edges.pb(w,x,y);
+    }
+    sort(G.edges.begin(),G.edges.end());
+    int ans=0;
+    for(int i=0;i<m;i++){
+        int x=G.edges[i][1];
+        int y=G.edges[i][2];
+        int w=G.edges[i][0];
+        //if no cycle is encountered add in graph
+        if(get(x)!=get(y)){
+            G.unite(x,y);
+            ans+=w;
+        }
+
+    }
+    cout<<"The minimum spanning tree is of length "<<ans<<" units"<<endl;
+
+    return 0;
+}
